@@ -10,7 +10,7 @@ export default function Logo(props: SVGProps<SVGSVGElement>) {
       xmlns='http://www.w3.org/2000/svg'
       {...props}
     >
-      <g clip-path='url(#clip0_1_3682)'>
+      <g clipPath='url(#clip0_1_3682)'>
         <rect
           width='16.6754'
           height='16.6754'
