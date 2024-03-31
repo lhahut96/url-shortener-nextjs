@@ -3,7 +3,7 @@ import { Db, MongoClient } from "mongodb";
 class MongoURLShortener {
   private static cachedDB: Db | null = null;
 
-  constrcutor() {}
+  private constrcutor() {}
 
   public static async connectToDatabase() {
     if (MongoURLShortener.cachedDB) {
