@@ -20,7 +20,6 @@ The URL Shortener is a web application that allows users to shorten long URLs in
 - Shorten long URLs into shorter, more readable links
 - Customizable link aliases
 - Analytics to track link clicks and user engagement
-- User authentication and account management
 
 ## Installation
 
