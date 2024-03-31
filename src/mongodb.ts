@@ -1,18 +1,27 @@
 import { Db, MongoClient } from "mongodb";
 
-let cachedDB: Db | null = null;
+class MongoDB {
+  public cachedDB: Db | null = null;
 
-export default async function connectToDatabase(): Promise<Db> {
-  if (cachedDB) {
-    console.info("Using cached client!");
-    return cachedDB;
+  constrcutor() {
+    this.cachedDB = null;
   }
-  console.info("No client found! Creating a new one.");
-  console.log(process.env.ATLAS_URI_PROD);
-  // If no connection is cached, create a new one
-  const client = new MongoClient(process.env.ATLAS_URI_PROD as string);
-  await client.connect();
-  const db: Db = client.db(process.env.DB_NAME);
-  cachedDB = db;
-  return cachedDB;
+
+  async connectToDatabase() {
+    if (this.cachedDB) {
+      console.info("Using cached client!");
+      return this.cachedDB;
+    }
+    console.info("No client found! Creating a new one.");
+    // If no connection is cached, create a new one
+    const client = new MongoClient(process.env.ATLAS_URI_PROD as string);
+    await client.connect();
+    const db: Db = client.db(process.env.DB_NAME);
+    this.cachedDB = db;
+    return this.cachedDB;
+  }
 }
+
+const MongoDbInstance = Object.freeze(new MongoDB());
+
+module.exports = MongoDbInstance;

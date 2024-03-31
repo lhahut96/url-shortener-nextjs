@@ -1,13 +1,20 @@
 import { NextRequest, NextResponse } from "next/server";
+import { getService } from "../services/url-shortener";
 
-export async function GET(request: NextRequest) {
-  const requestUrl = request.url;
-
-  return NextResponse.json({
-    message: "Hello from the API",
-    request: requestUrl,
-  });
-}
+export const GET = async (request: NextRequest) => {
+  const hash = request.nextUrl.searchParams.get("hash") as string;
+  const campaign = await getService(hash);
+  if (campaign) {
+    return NextResponse.json(
+      {
+        type: "Success",
+        message: "Link found",
+        link: campaign.link,
+      },
+      { status: 200 }
+    );
+  }
+};
 
 export async function HEAD(request: NextRequest) {}
 

@@ -1,12 +1,4 @@
-export const dynamic = "auto";
-export const dynamicParams = true;
-export const revalidate = false;
-export const fetchCache = "auto";
-export const runtime = "nodejs";
-export const preferredRegion = "auto";
-
-import { COLLECTION_NAMES } from "@/app/types";
-import connectToDatabase from "@/mongodb";
+import { createShortLink, getService } from "@/app/services/url-shortener";
 import { customAlphabet } from "nanoid";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,16 +6,31 @@ const characters =
   "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
 const getHash = customAlphabet(characters, 4);
 
+export const GET = async (request: NextRequest) => {
+  const hash = request.nextUrl.searchParams.get("hash") as string;
+  const campaign = await getService(hash);
+  if (campaign) {
+    return NextResponse.json(
+      {
+        type: "Success",
+        message: "Link found",
+        link: campaign.link,
+      },
+      { status: 200 }
+    );
+  }
+};
+
 export const POST = async (request: NextRequest) => {
   const apiKey = request.headers.get("api-key");
   const newHeaders = new Headers(request.headers);
-  if (request.method !== "POST" || apiKey !== process.env.API_KEY) {
+  if (apiKey !== process.env.API_KEY) {
     newHeaders.set("code", "405");
     return NextResponse.json(
       {
         type: "Error",
         code: 405,
-        message: "Only POST method is accepted on this route",
+        message: "API Key is invalid",
       },
       { status: 405 }
     );
@@ -43,14 +50,10 @@ export const POST = async (request: NextRequest) => {
   }
 
   try {
-    const database = await connectToDatabase();
-    const urlInfoCollection = database.collection(COLLECTION_NAMES["url-info"]);
     const hash = getHash();
-    const linkExists = await urlInfoCollection.findOne({
-      link,
-    });
+    const linkExists = await createShortLink(link, hash);
     const shortUrl = `${process.env.HOST}/link/${hash}`;
-    if (linkExists) {
+    if (linkExists.created) {
       return NextResponse.json(
         {
           type: "Success",
@@ -60,10 +63,6 @@ export const POST = async (request: NextRequest) => {
         { status: 200 }
       );
     } else {
-      await urlInfoCollection.insertOne({
-        link,
-        uid: hash,
-      });
       return NextResponse.json(
         {
           type: "Success",
