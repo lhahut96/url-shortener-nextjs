@@ -1,27 +1,23 @@
 import { Db, MongoClient } from "mongodb";
 
-class MongoDB {
-  public cachedDB: Db | null = null;
+class MongoURLShortener {
+  private static cachedDB: Db | null = null;
 
-  constrcutor() {
-    this.cachedDB = null;
-  }
+  constrcutor() {}
 
-  async connectToDatabase() {
-    if (this.cachedDB) {
+  public static async connectToDatabase() {
+    if (MongoURLShortener.cachedDB) {
       console.info("Using cached client!");
-      return this.cachedDB;
+      return MongoURLShortener.cachedDB;
     }
     console.info("No client found! Creating a new one.");
     // If no connection is cached, create a new one
     const client = new MongoClient(process.env.ATLAS_URI_PROD as string);
     await client.connect();
     const db: Db = client.db(process.env.DB_NAME);
-    this.cachedDB = db;
-    return this.cachedDB;
+    MongoURLShortener.cachedDB = db;
+    return MongoURLShortener.cachedDB;
   }
 }
 
-const MongoDbInstance = Object.freeze(new MongoDB());
-
-module.exports = MongoDbInstance;
+export default MongoURLShortener;
