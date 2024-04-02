@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className='flex min-h-screen flex-col items-center justify-between p-24'>
       <section className='container mt-[100px] bg-[#313434] text-white h-full rounded-lg py-4'>
-        <div className='container-wrapper flex flex-col gap-28  py-10'>
+        <div className='container-wrapper flex flex-col gap-28 py-10'>
           <h1 className='text-5xl font-extrabold text-center'>Short - It</h1>
           <div className='content flex flex-col items-center justify-center gap-3'>
             <Logo />
