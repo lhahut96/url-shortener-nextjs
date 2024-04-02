@@ -2,28 +2,32 @@
 
 import { useState } from "react";
 import { Logo } from "../components";
+import { callCreateShortLInk } from "./actions";
 
 export default function Home() {
   const [url, setUrl] = useState("");
   const [shortUrl, setShortUrl] = useState("");
 
   const generateShortUrl = async () => {
-    const header = new Headers();
-    try {
-      console.log(url);
-      const response = await fetch("/api/url-shortener", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "api-key": `${process.env.NEXT_PUBLIC_API_KEY}`,
-        },
-        body: JSON.stringify({ link: url }),
-      });
-      const data = await response.json();
-      setShortUrl(data.shortUrl);
-    } catch (error) {
-      console.error(error);
-    }
+    // try {
+    //   console.log(url);
+    //   const response = await fetch("/api/url-shortener", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //       "api-key": `${process.env.NEXT_PUBLIC_API_KEY}`,
+    //     },
+    //     body: JSON.stringify({ link: url }),
+    //   });
+    //   const data = await response.json();
+    //   setShortUrl(data.shortUrl);
+    // } catch (error) {
+    //   console.error(error);
+    // }
+
+    // Call server action
+    const shortUrl = await callCreateShortLInk(url);
+    setShortUrl(shortUrl as string);
   };
 
   return (
