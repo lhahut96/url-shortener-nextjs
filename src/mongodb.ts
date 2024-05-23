@@ -15,6 +15,7 @@ class MongoURLShortener {
     const client = new MongoClient(process.env.ATLAS_URI_PROD as string);
     await client.connect();
     const db: Db = client.db(process.env.DB_NAME);
+    console.info(process.env.DB_NAME, "DB_NAME");
     MongoURLShortener.cachedDB = db;
     return MongoURLShortener.cachedDB;
   }
