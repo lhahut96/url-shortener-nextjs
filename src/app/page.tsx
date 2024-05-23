@@ -26,8 +26,9 @@ export default function Home() {
     // }
 
     // Call server action
+
     const shortUrl = await callCreateShortLInk(url);
-    setShortUrl(shortUrl as string);
+    setShortUrl(`${window.location.origin}/${shortUrl}` as string);
   };
 
   return (

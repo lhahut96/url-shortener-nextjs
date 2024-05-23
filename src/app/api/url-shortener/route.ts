@@ -52,13 +52,13 @@ export const POST = async (request: NextRequest) => {
   try {
     const hash = getHash();
     const linkExists = await createShortLink(link, hash);
-    const shortUrl = `${process.env.HOST}/link/${hash}`;
+    const shortUrl = `${window.location.origin}/link/${hash}`;
     if (linkExists.created) {
       return NextResponse.json(
         {
           type: "Success",
           message: "Link already exists",
-          shortUrl: `${process.env.HOST}/link/${linkExists.uid}`,
+          shortUrl: `${window.location.origin}/link/${linkExists.uid}`,
         },
         { status: 200 }
       );
