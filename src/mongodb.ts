@@ -12,6 +12,8 @@ class MongoURLShortener {
     }
     console.info("No client found! Creating a new one.");
     // If no connection is cached, create a new one
+    console.info("Connecting to MongoDB with URI:", process.env.ATLAS_URI_PROD);
+
     const client = new MongoClient(process.env.ATLAS_URI_PROD as string);
     await client.connect();
     console.info("Connected to MongoDB");
