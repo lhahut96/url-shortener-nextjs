@@ -7,6 +7,8 @@ const characters =
 const getHash = customAlphabet(characters, 4);
 
 export const GET = async (request: NextRequest) => {
+  console.info("GET request");
+  console.info(process.env.DB_NAME, "DB_NAME");
   const hash = request.nextUrl.searchParams.get("hash") as string;
   const campaign = await getService(hash);
   if (campaign) {
