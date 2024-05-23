@@ -14,6 +14,7 @@ class MongoURLShortener {
     // If no connection is cached, create a new one
     const client = new MongoClient(process.env.ATLAS_URI_PROD as string);
     await client.connect();
+    console.info("Connected to MongoDB");
     const db: Db = client.db(process.env.DB_NAME);
     console.info(process.env.DB_NAME, "DB_NAME");
     MongoURLShortener.cachedDB = db;
