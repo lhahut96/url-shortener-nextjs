@@ -7,10 +7,6 @@ const characters =
 const getHash = customAlphabet(characters, 4);
 
 export const GET = async (request: NextRequest) => {
-  console.info("GET request");
-  console.info("Environment Variables:");
-  console.info("DB_NAME:", process.env.DB_NAME);
-  console.info("API_KEY:", process.env.API_KEY);
   // Add more console.info statements for other environment variables if needed
   const hash = request.nextUrl.searchParams.get("hash") as string;
   const campaign = await getService(hash);

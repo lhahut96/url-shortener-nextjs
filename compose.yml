@@ -1,0 +1,27 @@
+services:
+  url-shorterner:
+    container_name: url-shorterner
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    environment:
+      - NODE_ENV=production
+      - BUN_ENV=production
+    volumes:
+      - ./public:/app/public:ro
+      # Don't mount any other directories that would override built files
+    networks:
+      - reverse-proxy
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.self-project-url-shorterner.entrypoints=websecure,web"
+      - "traefik.http.routers.self-project-url-shorterner.rule=Host(`url.$DOMAINNAME_CLOUD_SERVER`)"
+      # - "traefik.http.routers.self-project-url-shorterner.middlewares=chain-authelia@file"
+      - "traefik.http.routers.self-project-url-shorterner.middlewares=cloudflarewarp@file"
+      - "traefik.http.routers.self-project-url-shorterner.service=self-project-url-shorterner-svc"
+      - "traefik.http.services.self-project-url-shorterner-svc.loadbalancer.server.port=3000"   
+networks:
+  reverse-proxy:
+    name: lucas-proxy
+    external: true
